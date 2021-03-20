@@ -25,6 +25,7 @@ public class Item {
 	
 	
 	class Weapon extends Item {
+		int minDamage, maxDamage, range;
 		
 	public int getMinDamage() {
 		return this.minDamage;
@@ -44,9 +45,6 @@ public class Item {
 	public void setRange(int range) {
 		this.range = range;
 	}
-	
-	
-	int minDamage, maxDamage, range;
 	
 		Weapon(int minDamage, int maxDamage, int range, int weight, int quantity, int value){
 		this.minDamage = minDamage;
