@@ -7,6 +7,7 @@ public class Creature {
 
 	public int attack(int minDamage, int maxDamage) {
 		return (int) Math.random() * (maxDamage - minDamage);
+		
 	}
 	
 class BattlePriest extends Creature implements SpecialPower {
@@ -27,9 +28,9 @@ class BattlePriest extends Creature implements SpecialPower {
 		this.moveSpeed = moveSpeed;
 	}
 	@Override
-	public int skill() {
-		System.out.println("Skill used");
-		return 0;
+	public int skill(int damage) {
+		System.out.println("Skill used 2");
+		return damage;
 	}
 }
 class Warrior extends Creature implements SpecialPower {
@@ -51,9 +52,9 @@ class Warrior extends Creature implements SpecialPower {
 		
 	}
 	@Override
-	public int skill() {
+	public int skill(int damage) {
 		System.out.println("Skill used 2");
-		return 0;
+		return damage;
 	}
 }
 
@@ -160,4 +161,6 @@ public int getMoveSpeed() {
 public void setMoveSpeed(int moveSpeed) {
 	this.moveSpeed = moveSpeed;
 }
+
 }
+

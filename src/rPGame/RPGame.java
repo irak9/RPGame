@@ -7,5 +7,6 @@ public class RPGame {
 		GameMechanics mechanics = new GameMechanics();
 		mechanics.setDifficulty();
 		mechanics.createCharacter();
+		mechanics.Shop();
 	}
 }

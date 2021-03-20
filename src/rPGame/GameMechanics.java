@@ -1,13 +1,15 @@
 package rPGame;
 
 import java.util.Scanner;
-
 import rPGame.Creature.*;
+import rPGame.Item.*;
 
 public class GameMechanics {
-	private int attrbPoint, choice;
+	private int attrbPoint, choice, itemLevel, gold;
 	private Creature player, enemy;
-	private double difficultyRating;
+	private Armour armor;
+	private Weapon weapon;
+	
 	
 	public int choiceMethod(int choice) {
 		Scanner nmb = new Scanner(System.in);
@@ -35,17 +37,20 @@ public class GameMechanics {
 		switch(choiceMethod(choice)) {
 		case 1: {
 			attrbPoint = 30;
-			difficultyRating = 0.75;
+			itemLevel = 2;
+			gold = 100;
 			break;
 		}
 		case 2: {
 			attrbPoint = 25;
-			difficultyRating = 1;
+			itemLevel = 2;
+			gold = 75;
 			break;
 		}
 		case 3: {
 			attrbPoint = 20;
-			difficultyRating = 1.25;
+			itemLevel = 1;
+			gold = 50;
 			break;
 		}
 		default: {
@@ -151,7 +156,6 @@ public class GameMechanics {
 		player.setName(name);
 		System.out.println("Creating character completed");
 		characterInfo();
-		
 	}
 	
 	public void characterInfo() {
@@ -166,6 +170,8 @@ public class GameMechanics {
 		System.out.println("Your bonus attack rate is: " + player.getAttackRate());
 		System.out.println("Your bonus defense rate is: " + player.getDefenseRate());
 	}
+	
+	
 	
 // End of character creation
 	
@@ -189,6 +195,98 @@ public class GameMechanics {
 		}
 		}
 	}
+//End of enemy creation	
 	
+//items creation
+	public Weapon createWeapon(int itemLevel) {
+		String name = "Broadsword";
+		int minDamage = (int) ((Math.random() * 3) + itemLevel);
+		int maxDamage = (int) ((Math.random() * 4) + ((Math.random() * 3)) + itemLevel);
+		int weight = 4;
+		int range = 1;
+		int quantity = 1;
+		int value = (int) ((Math.random() * 25) + (Math.random() * itemLevel * 2) + 20);
+		Item item = new Item();
+		Weapon weapon = item.new Weapon(name, minDamage, maxDamage, range, weight, quantity, value);
+		return weapon;
+	}
+	public Armour createArmour(int itemLevel) {
+		String name = "Chain Mail";
+		int armour = (int) ((Math.random() * itemLevel) + 2);
+		int weight = 20;
+		int quantity = 1;
+		int value = (int) ((Math.random() * 20) + 30);
+		Item item = new Item();
+		Armour armor = item.new Armour(name, armour, weight, quantity, value);
+		return armor;
+	}
 	
+	public void weaponInfo(Weapon weapon) {
+		System.out.println("Name: " + weapon.getName());
+		System.out.println("Damage: " + weapon.getMinDamage() + "-" + weapon.getMaxDamage());
+		System.out.println("Range: " + weapon.getRange());
+		System.out.println("Weight: " + weapon.getWeight());
+		System.out.println("Value " + weapon.getValue());		
+	}
+	public void armourInfo(Armour armour) {
+		System.out.println("Name: " + armour.getName());
+		System.out.println("Armor: " + armour.getArmour());
+		System.out.println("Weight: " + armour.getWeight());
+		System.out.println("Value: " + armour.getValue());
+	}
+	
+//End of items creation
+	
+	public void Shop() {
+		boolean choiceInShop = true;
+		int weaponStock = 1;
+		int armourStock = 1;
+		Weapon weapon;
+		Armour armor;
+		weapon = createWeapon(itemLevel);
+		armor = createArmour(itemLevel);
+		System.out.println("Welcome in my shop, what would you like to buy");
+		System.out.println("1-weapon, 2-armour, 3-healing potion, 0-leave shop");
+		System.out.println("damage " + weapon.getMinDamage() +"-" + weapon.getMaxDamage() + " Value: " + weapon.getValue());
+		System.out.println("armour "+ armor.getArmour() + " Value " + armor.getValue());
+		while(choiceInShop == true) {
+			System.out.println("1-weapon, 2-armour, 3-healing potion, 0-leave shop");
+			System.out.println("Your gold: " + gold);
+			switch(choiceMethod(choice)) {
+			case 1:	{
+				if(weaponStock == 0)
+					System.out.println("Sorry, weapon sold");
+				else if(weapon.getValue() > gold)
+					System.out.println("Sorry, you've got not enough gold");
+				if(weaponStock == 1 && gold >= weapon.getValue()) {
+					this.weapon = weapon;
+					weaponStock = weaponStock - 1;
+					gold = gold - weapon.getValue();
+				}
+				break;
+				}
+			case 2: {
+				if(armourStock == 0)
+					System.out.println("Sorry, armour sold");
+				else if(armor.getValue() > gold)
+					System.out.println("Sorry, you've got not enough gold");
+				if(armourStock == 1 && gold >= armor.getValue()) {
+					this.armor = armor;
+					armourStock = armourStock - 1;
+					gold = gold - armor.getValue();
+				}
+				break;
+				}
+			case 3: {				
+				break;
+				}
+			default : {
+					choiceInShop = false;
+				}
+			}
+		}
+	}
+	public void Battle() {
+		
+	}
 }

@@ -1,7 +1,7 @@
 package rPGame;
 
 public class Item {
-
+	String name;
 	int weight, quantity, value;
 	
 	public int getQuantity() {
@@ -21,6 +21,12 @@ public class Item {
 	}
 	public void setWeight(int weight) {
 		this.weight = weight;
+	}
+	public String getName() {
+		return this.name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	
@@ -46,7 +52,8 @@ public class Item {
 		this.range = range;
 	}
 	
-		Weapon(int minDamage, int maxDamage, int range, int weight, int quantity, int value){
+		Weapon(String name, int minDamage, int maxDamage, int range, int weight, int quantity, int value){
+		this.name = name;
 		this.minDamage = minDamage;
 		this.maxDamage = maxDamage;
 		this.range = range;
@@ -56,9 +63,19 @@ public class Item {
 		}
 	}
 	
+	
 	class Armour extends Item{
 		int armour;
-		Armour(int armour, int weight, int quantity, int value){
+		
+		public int getArmour() {
+			return this.armour;
+		}
+		public void setArmour() {
+			this.armour = armour;
+		}
+		
+		Armour(String name, int armour, int weight, int quantity, int value){
+			this.name = name;
 			this.armour = armour;
 			this.weight = weight;
 			this.quantity = quantity;

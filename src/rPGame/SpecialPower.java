@@ -2,5 +2,5 @@ package rPGame;
 
 public interface SpecialPower {
 
-	public int skill();
+	public int skill(int damage);
 }
