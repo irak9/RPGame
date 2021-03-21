@@ -1,14 +1,15 @@
 package rPGame;
 
+import rPGame.Item.Armour;
+import rPGame.Item.Weapon;
+
 public class Creature {
 	String name;
 	protected int strength, dexterity, vitality, willpower, inteligence;
-	protected int hitPoints, energy, attackRate, defenseRate, moveSpeed, currentHitPoints, currentEnergy;
+	protected int maxHitPoints, maxEnergy, attackRate, defenseRate, moveSpeed, currentHitPoints, currentEnergy, gold;
+	protected Weapon weapon;
+	protected Armour armour;
 
-	public int attack(int minDamage, int maxDamage) {
-		return (int) Math.random() * (maxDamage - minDamage);
-		
-	}
 	
 class BattlePriest extends Creature implements SpecialPower {
 	BattlePriest(String name, int strength, int dexterity, int vitality, int willpower, int inteligence,
@@ -19,13 +20,16 @@ class BattlePriest extends Creature implements SpecialPower {
 		this.vitality = vitality;
 		this.willpower = willpower;
 		this.inteligence = inteligence;
-		this.hitPoints = (vitality * 10) + (strength * 2) + 40;
-		this.currentHitPoints = hitPoints;
-		this.energy = (willpower * 4) + 20;
-		this.currentEnergy = energy;
-		this.attackRate = (strength * 2);
-		this.defenseRate = (dexterity * 1);
+		this.maxHitPoints = maxHitPoints;
+		this.currentHitPoints = maxHitPoints;
+		this.maxEnergy = maxEnergy;
+		this.currentEnergy = maxEnergy;
+		this.attackRate = attackRate;
+		this.defenseRate = defenseRate;
 		this.moveSpeed = moveSpeed;
+		this.weapon = null;
+		this.armour = null;
+		this.gold = 0;
 	}
 	@Override
 	public int skill(int damage) {
@@ -42,14 +46,16 @@ class Warrior extends Creature implements SpecialPower {
 		this.vitality = vitality;
 		this.willpower = willpower;
 		this.inteligence = inteligence;
-		this.hitPoints = (vitality * 7) + (strength * 4) + 60;
-		this.currentHitPoints = hitPoints;this.currentEnergy = energy;
-		this.energy = (willpower * 2) + 5;
-		this.currentEnergy = energy;
-		this.attackRate = (strength * 2) + (dexterity * 1);
-		this.defenseRate = (dexterity * 2);
+		this.maxHitPoints = maxHitPoints;
+		this.currentHitPoints = maxHitPoints;
+		this.maxEnergy = maxEnergy;
+		this.currentEnergy = maxEnergy;
+		this.attackRate = attackRate;
+		this.defenseRate = defenseRate;
 		this.moveSpeed = moveSpeed;
-		
+		this.weapon = null;
+		this.armour = null;
+		this.gold = 0;
 	}
 	@Override
 	public int skill(int damage) {
@@ -67,13 +73,16 @@ class Goblin extends Creature {
 		this.vitality = vitality;
 		this.willpower = willpower;
 		this.inteligence = inteligence;
-		this.hitPoints = (vitality * 4) + (strength * 2) + 10;
-		this.currentHitPoints = hitPoints;
-		this.energy = (willpower * 1) + 3;
-		this.currentEnergy = energy;
-		this.attackRate = (strength * 1) + (dexterity * 3);
-		this.defenseRate = (dexterity * 2);
+		this.maxHitPoints = maxHitPoints;
+		this.currentHitPoints = maxHitPoints;
+		this.maxEnergy = maxEnergy;
+		this.currentEnergy = maxEnergy;
+		this.attackRate = attackRate;
+		this.defenseRate = defenseRate;
 		this.moveSpeed = moveSpeed;
+		this.weapon = null;
+		this.armour = null;
+		this.gold = 0;
 	}
 }
 class GoblinRaider extends Creature {
@@ -85,13 +94,16 @@ class GoblinRaider extends Creature {
 		this.vitality = vitality;
 		this.willpower = willpower;
 		this.inteligence = inteligence;
-		this.hitPoints = (vitality * 6) + (strength * 6) + 40;
-		this.currentHitPoints = hitPoints;
-		this.energy = (willpower * 1) + 3;
-		this.currentEnergy = energy;
-		this.attackRate = (strength * 3) + (dexterity * 3);
-		this.defenseRate = (dexterity * 2);
+		this.maxHitPoints = maxHitPoints;
+		this.currentHitPoints = maxHitPoints;
+		this.maxEnergy = maxEnergy;
+		this.currentEnergy = maxEnergy;
+		this.attackRate = attackRate;
+		this.defenseRate = defenseRate;
 		this.moveSpeed = moveSpeed;
+		this.weapon = null;
+		this.armour = null;
+		this.gold = 0;
 	}
 }
 
@@ -131,17 +143,17 @@ public String getName() {
 public void setName(String name) {
 	this.name = name;
 }
-public int getHitPoints() {
-	return this.hitPoints;
+public int getMaxHitPoints() {
+	return this.maxHitPoints;
 }
-public void setHitPoints(int hitPoints) {
-	this.hitPoints = hitPoints;
+public void setMaxHitPoints(int maxHitPoints) {
+	this.maxHitPoints = maxHitPoints;
 }
-public int getEnergy() {
-	return this.energy;
+public int getMaxEnergy() {
+	return this.maxEnergy;
 }
-public void setEnergy(int energy) {
-	this.energy = energy;
+public void setMaxEnergy(int maxEnergy) {
+	this.maxEnergy = maxEnergy;
 }
 public int getAttackRate() {
 	return this.attackRate;
@@ -161,6 +173,23 @@ public int getMoveSpeed() {
 public void setMoveSpeed(int moveSpeed) {
 	this.moveSpeed = moveSpeed;
 }
-
+public int getGold() {
+	return this.gold;
+}
+public void setGold(int gold) {
+	this.gold = gold;
+}
+public Weapon getCurrentWeapon() {
+	return this.weapon ;
+}
+public void setCurrentWeapon(Weapon weapon) {
+	this.weapon = weapon;
+}
+public Armour getCurrentArmour() {
+	return this.armour;
+}
+public void setCurrentArmour(Armour armour) {
+	this.armour = armour;
+}
 }
 

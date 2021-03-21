@@ -2,16 +2,14 @@ package rPGame;
 
 import java.util.Scanner;
 import rPGame.Creature.*;
+import rPGame.GameMechanics.difficultyInstance;
 import rPGame.Item.*;
 
 public class GameMechanics {
-	private int attrbPoint, choice, itemLevel, gold;
-	private Creature player, enemy;
-	private Armour armor;
-	private Weapon weapon;
 	
 	
-	public int choiceMethod(int choice) {
+	public int choiceMethod() {
+		int choice = 0;
 		Scanner nmb = new Scanner(System.in);
 		try {
 		choice = nmb.nextInt();
@@ -21,36 +19,38 @@ public class GameMechanics {
 		}
 		return choice;
 	}
-	public String choiceMethod(String choice) {
+	public String choiceMethod2() {
+		String choice = "noName";
 		Scanner strng = new Scanner(System.in);
 		try {
 		choice = strng.nextLine();
 		}
-		catch(Exception numberError) {
+		catch(Exception stringError) {
 			System.out.println("Error");
 		}
 		return choice;
 	}
-	public void setDifficulty() {
+	public difficultyInstance setDifficulty() {
+		int itemLevel = 0, gold = 0, attrbPoints = 0, choice = 0;
 		System.out.println("Choose difficulty");
 		System.out.println("1-easy, 2-normal, 3-hard");
-		switch(choiceMethod(choice)) {
+		switch(choiceMethod()) {
 		case 1: {
-			attrbPoint = 30;
-			itemLevel = 2;
+			itemLevel = 3;
 			gold = 100;
+			attrbPoints = 30;
 			break;
 		}
 		case 2: {
-			attrbPoint = 25;
 			itemLevel = 2;
-			gold = 75;
+			gold = 100;
+			attrbPoints = 25;
 			break;
 		}
 		case 3: {
-			attrbPoint = 20;
 			itemLevel = 1;
-			gold = 50;
+			gold = 75;
+			attrbPoints = 25;
 			break;
 		}
 		default: {
@@ -58,75 +58,61 @@ public class GameMechanics {
 			break;
 		}
 		}
+		difficultyInstance diff = new difficultyInstance(itemLevel, gold, attrbPoints);
+		return diff;
+	}
+	public int setItemlevel(int itemLevel) {
+		return itemLevel;
 	}
 	
-	public void addCreature(Object object) {
-		
-	} 
 //Character creation	
 	
-	public void createCharacter() {
-		boolean characterChoice = true, attributeChoice = true;
-		String name = "name";
-		int str = 0, dex = 0, vit = 0, will = 0, intl = 0;
-		int curStr = 0, curDex = 0, curVit = 0, curWill = 0, curIntl = 0;
-		int classChoice = 0;
-		
-		System.out.println("Choose your profession");
-		System.out.println("1-Warrior, 2-Battle Prist");
-		while(characterChoice == true) {
-			switch(choiceMethod(choice)) {
-				case 1: {
-					classChoice = 1;
-					characterChoice = false;
-					break;
-				}
-				case 2: {
-					classChoice = 2;
-					characterChoice = false;
-					break;
-				}
-				default :{
-					System.out.println("Try again");
-				}
-			
-			}
-		}
+	public String nameYourCharacter() {
+		String name = "noName";
 		System.out.println("Name Your character");
-		name = choiceMethod(name);
+		name = choiceMethod2();
+		return name;
+	}
+
+	public Warrior createWarrior(String name, int attrbPoint, int gold) {
+		int str = 0, dex = 0, vit = 0, will = 0, intl = 0;
+		boolean attributeChoice = true;
+		
+		Creature creature = new Creature();
+		Warrior player = creature.new Warrior("profession", 1, 1, 1, 1, 1, 4);
 		while(attributeChoice == true) {
 			System.out.println("You have " + attrbPoint + " attribute points to spend");
 			System.out.println("Pick attribute and how many points you want to spend");
 			System.out.println("1-Strength, 2-Dexterity, 3-Vitalilty, 4-Willpower, 5-Inteligence");			
 			
-			switch(choiceMethod(choice)) {
+			switch(choiceMethod()) {
 			case 1: {
-				str = Math.min(choiceMethod(choice), attrbPoint);
-				curStr = curStr + str;
+				str = Math.min(choiceMethod(), attrbPoint);
+				player.setStrength(player.getStrength() + str);
 				attrbPoint = attrbPoint - str;
 				break;
 			}
 			case 2: {
-				dex = Math.min(choiceMethod(choice), attrbPoint);
-				curDex = curDex + dex;
+				dex = Math.min(choiceMethod(), attrbPoint);
+				player.setDexterity(player.getDexterity() + dex);
 				attrbPoint = attrbPoint - dex;
 				break;
 			}
 			case 3: {
-				vit = Math.min(choiceMethod(choice), attrbPoint);
-				curVit = curVit + vit;
+				vit = Math.min(choiceMethod(), attrbPoint);
+				player.setVitality(player.getVitality() + vit);
 				attrbPoint = attrbPoint - vit;
 				break;
 			}
 			case 4: {
-				will = Math.min(choiceMethod(choice), attrbPoint);
-				curWill = curWill + will;
+				will = Math.min(choiceMethod(), attrbPoint);
+				player.setWillpower(player.getWillpower() + will);
 				attrbPoint = attrbPoint - will;
 				break;
 			}
 			case 5:{
-				intl = Math.min(choiceMethod(choice), attrbPoint);
-				curIntl = curIntl + intl;
+				intl = Math.min(choiceMethod(), attrbPoint);
+				player.setInteligence(player.getInteligence() + intl);
 				attrbPoint = attrbPoint - intl;
 				break;
 			}
@@ -138,70 +124,115 @@ public class GameMechanics {
 				attributeChoice = false;
 			}
 		}
-		
-		switch(classChoice) {
-		case 1: {
-			Creature creature = new Creature();
-			Warrior player = creature.new Warrior("warrior", curStr, curDex, curVit, curWill, curIntl, 4);
-			this.player = player;
-			break;
-		}
-		case 2: {
-			Creature creature = new Creature();
-			BattlePriest player = creature.new BattlePriest("battlePriest", curStr, curDex, curVit, curWill, curIntl, 4);
-			this.player = player;
-			break;
-		}
-		}
 		player.setName(name);
-		System.out.println("Creating character completed");
-		characterInfo();
+		player.setMaxHitPoints(player.getVitality() * 7 + player.getStrength() * 4 + 60);
+		player.setMaxEnergy(player.getWillpower() * 2 + 5);
+		player.setAttackRate(player.getStrength() * 2 + player.getDexterity() * 1);
+		player.setDefenseRate(player.getDexterity() * 2);
+		player.setGold(gold);
+		characterInfo(player);
+		return player;
 	}
 	
-	public void characterInfo() {
+	public BattlePriest createBattlePriest(String name, int attrbPoint, int gold) {
+		int str = 0, dex = 0, vit = 0, will = 0, intl = 0;
+		boolean attributeChoice = true;
+		
+		Creature creature = new Creature();
+		BattlePriest player = creature.new BattlePriest("profesion", 1, 1, 1, 1, 1, 4);
+		while(attributeChoice == true) {
+			System.out.println("You have " + attrbPoint + " attribute points to spend");
+			System.out.println("Pick attribute and how many points you want to spend");
+			System.out.println("1-Strength, 2-Dexterity, 3-Vitalilty, 4-Willpower, 5-Inteligence");			
+			
+			switch(choiceMethod()) {
+			case 1: {
+				str = Math.min(choiceMethod(), attrbPoint);
+				player.setStrength(player.getStrength() + str);
+				attrbPoint = attrbPoint - str;
+				break;
+			}
+			case 2: {
+				dex = Math.min(choiceMethod(), attrbPoint);
+				player.setDexterity(player.getDexterity() + dex);
+				attrbPoint = attrbPoint - dex;
+				break;
+			}
+			case 3: {
+				vit = Math.min(choiceMethod(), attrbPoint);
+				player.setVitality(player.getVitality() + vit);
+				attrbPoint = attrbPoint - vit;
+				break;
+			}
+			case 4: {
+				will = Math.min(choiceMethod(), attrbPoint);
+				player.setWillpower(player.getWillpower() + will);
+				attrbPoint = attrbPoint - will;
+				break;
+			}
+			case 5:{
+				intl = Math.min(choiceMethod(), attrbPoint);
+				player.setInteligence(player.getInteligence() + intl);
+				attrbPoint = attrbPoint - intl;
+				break;
+			}
+			default:{
+				System.out.println("Try again");
+			}
+			}
+			if(attrbPoint == 0) {
+				attributeChoice = false;
+			}
+		}
+		player.setName(name);
+		player.setMaxHitPoints(player.getVitality() * 7 + player.getStrength() * 4 + 60);
+		player.setMaxEnergy(player.getWillpower() * 2 + 5);
+		player.setAttackRate(player.getStrength() * 2 + player.getDexterity() * 1);
+		player.setDefenseRate(player.getDexterity() * 2);
+		player.setGold(gold);
+		characterInfo(player);
+		return player;
+	}
+	
+	public void characterInfo(Creature player) {
 		System.out.println("Your name is: " + player.getName());
 		System.out.println("Your strength is: " + player.getStrength());
 		System.out.println("Your dexterity is: " + player.getDexterity());
 		System.out.println("Your vitality is: " + player.getVitality());
 		System.out.println("Your willpower is: " + player.getWillpower());
 		System.out.println("Your inteligence is: " + player.getInteligence());
-		System.out.println("Your hit poits are: " + player.getHitPoints());
-		System.out.println("Your energy is: " + player.getEnergy());
+		System.out.println("Your hit poits are: " + player.getMaxHitPoints() + "/");
+		System.out.println("Your energy points are: " + player.getMaxEnergy() + "/");
 		System.out.println("Your bonus attack rate is: " + player.getAttackRate());
 		System.out.println("Your bonus defense rate is: " + player.getDefenseRate());
+		System.out.println("You have: " + player.getGold() + " gold");
 	}
-	
 	
 	
 // End of character creation
 	
 //Enemy creation
-	public void createMonster(String name, int strength, int dexterity, int vitality, int willpower,
-			int inteligence, int moveSpeed) {
-		int numberOfEnemyTypes = 2;
-		int random = (int) (Math.random() * numberOfEnemyTypes);
-		switch(random) {
-		case 1: {
+	public Goblin createGoblin(String name, int strength, int dexterity, int vitality, int willpower,
+			int inteligence, int moveSpeed) {		
 		Creature creature = new Creature();
-		Goblin enemy = creature.new Goblin(name, strength, dexterity, vitality, willpower, inteligence, moveSpeed);
-		this.enemy = enemy;
-		break;
-		}
-		case 2: {
-			Creature creature = new Creature();
-			GoblinRaider enemy = creature.new GoblinRaider(name, strength, dexterity, vitality, willpower, inteligence, moveSpeed);
-			this.enemy = enemy;
-			break;
-		}
-		}
+		Goblin goblin = creature.new Goblin(name, strength, dexterity, vitality, willpower, inteligence, moveSpeed);	
+		return goblin;
 	}
+	
+	public GoblinRaider createGoblinRaider(String name, int strength, int dexterity, int vitality, int willpower,
+			int inteligence, int moveSpeed) {
+			Creature creature = new Creature();
+			GoblinRaider goblinRaider = creature.new GoblinRaider(name, strength, dexterity, vitality, willpower, inteligence, moveSpeed);
+		return goblinRaider;
+	}
+	
 //End of enemy creation	
 	
 //items creation
 	public Weapon createWeapon(int itemLevel) {
-		String name = "Broadsword";
+		String name = randomNameGen.weaponName();
 		int minDamage = (int) ((Math.random() * 3) + itemLevel);
-		int maxDamage = (int) ((Math.random() * 4) + ((Math.random() * 3)) + itemLevel);
+		int maxDamage = (int) ((Math.random() * 4) + ((Math.random() * 3)) + itemLevel + 2);
 		int weight = 4;
 		int range = 1;
 		int quantity = 1;
@@ -211,7 +242,7 @@ public class GameMechanics {
 		return weapon;
 	}
 	public Armour createArmour(int itemLevel) {
-		String name = "Chain Mail";
+		String name = randomNameGen.armourName();
 		int armour = (int) ((Math.random() * itemLevel) + 2);
 		int weight = 20;
 		int quantity = 1;
@@ -221,72 +252,239 @@ public class GameMechanics {
 		return armor;
 	}
 	
-	public void weaponInfo(Weapon weapon) {
-		System.out.println("Name: " + weapon.getName());
-		System.out.println("Damage: " + weapon.getMinDamage() + "-" + weapon.getMaxDamage());
-		System.out.println("Range: " + weapon.getRange());
-		System.out.println("Weight: " + weapon.getWeight());
-		System.out.println("Value " + weapon.getValue());		
-	}
-	public void armourInfo(Armour armour) {
-		System.out.println("Name: " + armour.getName());
-		System.out.println("Armor: " + armour.getArmour());
-		System.out.println("Weight: " + armour.getWeight());
-		System.out.println("Value: " + armour.getValue());
-	}
-	
 //End of items creation
 	
-	public void Shop() {
+//Equipment management
+
+	public void weaponInfo(Weapon weapon) {
+		System.out.print("Name: " + weapon.getName());
+		System.out.print(", Damage: " + weapon.getMinDamage() + "-" + weapon.getMaxDamage());
+		System.out.print(", Range: " + weapon.getRange());
+		System.out.print(", Weight: " + weapon.getWeight());
+		System.out.println(", Value " + weapon.getValue());		
+	}
+	public void armourInfo(Armour armour) {
+		System.out.print("Name: " + armour.getName());
+		System.out.print(", Armor: " + armour.getArmour());
+		System.out.print(", Weight: " + armour.getWeight());
+		System.out.println(", Value: " + armour.getValue());
+	}
+	
+	public void equipmentInfo(Creature player) {
+		boolean managingEq = true;
+		while (managingEq == true)
+		{
+			System.out.println("1-weapon, 2-armour, 0-exit");
+			switch(choiceMethod()) {
+			case 1: {
+				if(player.getCurrentWeapon() != null)
+					weaponInfo(player.getCurrentWeapon());
+				else
+					System.out.println("You have no weapon!");
+				break;
+			}
+			case 2: {
+				if(player.getCurrentArmour() != null)
+					armourInfo(player.getCurrentArmour());
+				else
+					System.out.println("You have no armour.");
+				break;
+			}
+			case 0: {
+				managingEq = false;
+			}
+			default:
+			}
+		}
+	}
+//End of equipment management
+
+//Shops
+	
+	public void Shop(Creature player, int itemLevel) {
 		boolean choiceInShop = true;
-		int weaponStock = 1;
-		int armourStock = 1;
 		Weapon weapon;
 		Armour armor;
+		
 		weapon = createWeapon(itemLevel);
 		armor = createArmour(itemLevel);
-		System.out.println("Welcome in my shop, what would you like to buy");
-		System.out.println("1-weapon, 2-armour, 3-healing potion, 0-leave shop");
-		System.out.println("damage " + weapon.getMinDamage() +"-" + weapon.getMaxDamage() + " Value: " + weapon.getValue());
-		System.out.println("armour "+ armor.getArmour() + " Value " + armor.getValue());
+		System.out.println("Welcome in my shop, how can i help you");
 		while(choiceInShop == true) {
-			System.out.println("1-weapon, 2-armour, 3-healing potion, 0-leave shop");
-			System.out.println("Your gold: " + gold);
-			switch(choiceMethod(choice)) {
+			System.out.println("1-buy, 2-sell, 9-Your eqiupment, 0-leave shop");
+			switch(choiceMethod()) {
+			case 1: {
+				buyAction(player, choiceInShop, weapon, armor);
+				break;
+			}
+			case 2: {
+				sellAction(player, choiceInShop);
+				break;
+			}
+			case 9: {
+				equipmentInfo(player);
+				break;
+			}
+			case 0:
+				choiceInShop = false;
+				break;
+		}
+		}
+	}
+	
+	public void buyAction(Creature player, boolean choiceInShop, Weapon weapon, Armour armor) {
+		int weaponStock = 1;
+		int armourStock = 1;
+		String shopKeeperDialogue = "What would you like to buy?";
+		
+		while(choiceInShop == true) {			
+			System.out.println(shopKeeperDialogue);
+			if(weaponStock == 1) {
+				System.out.println("1-" + weapon.getName() + " damage: " + weapon.getMinDamage() + "-" + weapon.getMaxDamage() + " price: " + weapon.getValue());
+			}
+			if(armourStock == 1) {
+				System.out.println("2-" + armor.getName() + " armour: "+ armor.getArmour() + " price: " + armor.getValue());
+			}
+			System.out.print("9-Your eqiupment,");
+			System.out.println(" 0-back");
+			System.out.println("Your gold: " + player.gold);
+			switch(choiceMethod()) {
 			case 1:	{
+				if(player.getCurrentWeapon() == null) {
 				if(weaponStock == 0)
 					System.out.println("Sorry, weapon sold");
-				else if(weapon.getValue() > gold)
+				else if(weapon.getValue() > player.getGold())
 					System.out.println("Sorry, you've got not enough gold");
-				if(weaponStock == 1 && gold >= weapon.getValue()) {
-					this.weapon = weapon;
+				if(weaponStock == 1 && player.getGold() >= weapon.getValue()) {
+					player.setCurrentWeapon(weapon); 
 					weaponStock = weaponStock - 1;
-					gold = gold - weapon.getValue();
+					player.setGold( player.getGold() - weapon.getValue());
+					System.out.println("You bought " + weapon.getName());
 				}
+				}
+				else 
+					System.out.println("Sell your current weapon.");
 				break;
 				}
 			case 2: {
+				if(player.getCurrentArmour() == null) {
 				if(armourStock == 0)
 					System.out.println("Sorry, armour sold");
-				else if(armor.getValue() > gold)
+				else if(armor.getValue() > player.getGold())
 					System.out.println("Sorry, you've got not enough gold");
-				if(armourStock == 1 && gold >= armor.getValue()) {
-					this.armor = armor;
+				if(armourStock == 1 && player.getGold() >= armor.getValue()) {
+					player.setCurrentArmour(armor);
 					armourStock = armourStock - 1;
-					gold = gold - armor.getValue();
+					player.setGold(player.getGold() - armor.getValue());
+					System.out.println("You bought " + armor.getName());
 				}
+				}
+				else
+					System.out.println("Sell your current armour");
 				break;
 				}
 			case 3: {				
 				break;
 				}
-			default : {
-					choiceInShop = false;
+			case 9:{
+				equipmentInfo(player);
+				break;
+			}
+			case 0: {
+				choiceInShop = false;
+				break;
+			}
+			}
+			shopKeeperDialogue = "Anything else?";
+		}
+	}
+	
+	public void sellAction(Creature player, boolean choiceInShop) {
+		while(choiceInShop == true) {
+			System.out.println("What would you like to sell?");
+			System.out.println("1-weapon , 2-armour, 9-Your equipment, 0-back");
+			switch(choiceMethod()) {
+			case 1: {
+				if(player.getCurrentWeapon() != null) {
+					Weapon weapon = player.getCurrentWeapon();
+					int value = (int) weapon.getValue()/2;
+					player.setGold(player.getGold() + value);
+					System.out.println("You sold your weapon for " + value + " gold");
+					player.setCurrentWeapon(null);
+					break;
 				}
+				else {
+					System.out.println("You have no weapon to sell");
+					break;
+				}
+			}
+			case 2: {
+				if(player.getCurrentArmour() != null) {
+					Armour armour = player.getCurrentArmour();
+					int value = (int) armour.getValue()/2;
+					player.setGold(player.getGold() + value);
+					System.out.println("You sold your armour for " + value + " gold");
+					player.setCurrentArmour(null);
+					break;				
+				}
+				else {
+					System.out.println("You have no armour to sell");
+					break;
+				}
+			}
+			case 9: {
+				equipmentInfo(player);
+				break;
+			}
+			case 0: {
+				choiceInShop = false;
+				break;
 			}
 		}
 	}
-	public void Battle() {
+}
+	
+	
+// End of shops
+	
+	
+	public void takeAction() {
 		
+	}
+			
+	public void startGame() {
+		String name;
+		difficultyInstance diff;
+		Creature player = null;
+		
+		int choice = choiceMethod();
+		diff = setDifficulty();
+		name = nameYourCharacter();
+		
+		while(true) {
+			switch(choice) {
+			case 1:{
+				 player = createWarrior(name, diff.attributePoints, diff.gold);
+				 break;
+			}
+			case 2:{
+				 player = createBattlePriest(name, diff.attributePoints, diff.gold);
+				 break;
+			}
+			default: {
+				System.out.println("Try again");
+				break;
+			}
+		}
+			Shop(player, diff.itemLevel);
+	}
+}	
+	
+	class difficultyInstance {
+		int itemLevel, gold, attributePoints;
+		difficultyInstance(int itemLevel, int gold, int attributePoints){
+			this.itemLevel = itemLevel;
+			this.gold = gold;
+			this.attributePoints = attributePoints;
+		}
 	}
 }
