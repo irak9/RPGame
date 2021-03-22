@@ -32,8 +32,8 @@ class BattlePriest extends Creature implements SpecialPower {
 		this.gold = 0;
 	}
 	@Override
-	public int skill(int damage) {
-		System.out.println("Skill used 2");
+	public int offensiveSkill(int damage) {
+		System.out.println("Battle Priest SKill");
 		return damage;
 	}
 }
@@ -58,8 +58,8 @@ class Warrior extends Creature implements SpecialPower {
 		this.gold = 0;
 	}
 	@Override
-	public int skill(int damage) {
-		System.out.println("Skill used 2");
+	public int offensiveSkill(int damage) {
+		System.out.println("Warrior Skill");
 		return damage;
 	}
 }
@@ -191,5 +191,7 @@ public Armour getCurrentArmour() {
 public void setCurrentArmour(Armour armour) {
 	this.armour = armour;
 }
+	
+
 }
 

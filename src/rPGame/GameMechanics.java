@@ -19,7 +19,7 @@ public class GameMechanics {
 		}
 		return choice;
 	}
-	public String choiceMethod2() {
+	public String chooseName() {
 		String choice = "noName";
 		Scanner strng = new Scanner(System.in);
 		try {
@@ -70,7 +70,7 @@ public class GameMechanics {
 	public String nameYourCharacter() {
 		String name = "noName";
 		System.out.println("Name Your character");
-		name = choiceMethod2();
+		name = chooseName();
 		return name;
 	}
 
@@ -194,6 +194,40 @@ public class GameMechanics {
 		return player;
 	}
 	
+	
+public Creature createCharacter(difficultyInstance difficulty) {
+	byte classID = 0;
+	boolean classChoice = true;
+	String name;
+	Creature player = null;
+	
+	name = nameYourCharacter();
+
+	while(classChoice) {
+		System.out.println("Pick your character class.");
+		System.out.println("1-Warrior, 2-BattlePriest");
+		switch(choiceMethod()) {
+		case 1:{
+			 player = createWarrior(name, difficulty.attributePoints, difficulty.gold);
+			 classID = 1;
+			 classChoice = false;
+			 break;
+		}
+		case 2:{
+			 player = createBattlePriest(name, difficulty.attributePoints, difficulty.gold);
+			 classID = 2;
+			 classChoice = false;
+			 break;
+		}
+		default: {
+			System.out.println("Try again");
+			break;
+		}
+	}
+}
+	return player;
+}
+	
 	public void characterInfo(Creature player) {
 		System.out.println("Your name is: " + player.getName());
 		System.out.println("Your strength is: " + player.getStrength());
@@ -208,8 +242,20 @@ public class GameMechanics {
 		System.out.println("You have: " + player.getGold() + " gold");
 	}
 	
-	
 // End of character creation
+	
+//Skill management
+	
+	public void skill1Manager(Creature player, byte classID) {
+		if (classID == 1) {
+			((Warrior) player).offensiveSkill(6);
+		}
+		if (classID == 2) {
+			((BattlePriest) player).offensiveSkill(8);
+		}
+	}
+	
+//End of skill management
 	
 //Enemy creation
 	public Goblin createGoblin(String name, int strength, int dexterity, int vitality, int willpower,
@@ -449,35 +495,13 @@ public class GameMechanics {
 	
 	public void takeAction() {
 		
-	}
-			
+	}	
+	
 	public void startGame() {
-		String name;
-		difficultyInstance diff;
-		Creature player = null;
-		
-		int choice = choiceMethod();
-		diff = setDifficulty();
-		name = nameYourCharacter();
-		
-		while(true) {
-			switch(choice) {
-			case 1:{
-				 player = createWarrior(name, diff.attributePoints, diff.gold);
-				 break;
-			}
-			case 2:{
-				 player = createBattlePriest(name, diff.attributePoints, diff.gold);
-				 break;
-			}
-			default: {
-				System.out.println("Try again");
-				break;
-			}
-		}
-			Shop(player, diff.itemLevel);
+		difficultyInstance diff = setDifficulty();
+		Creature player;
+		player = createCharacter(diff);
 	}
-}	
 	
 	class difficultyInstance {
 		int itemLevel, gold, attributePoints;
@@ -485,6 +509,31 @@ public class GameMechanics {
 			this.itemLevel = itemLevel;
 			this.gold = gold;
 			this.attributePoints = attributePoints;
+		}
+	public int getItemLevel() {
+		return this.itemLevel;
+	}
+	public void setItemLevel(int itemLevel) {
+		this.itemLevel = itemLevel;
+	}
+	}
+	class enemyDifficulty {
+		int itemLevel, enemyLevel;
+		public enemyDifficulty(int enemyLevel, int itemLevel) {
+			this.enemyLevel = enemyLevel;
+			this.itemLevel = itemLevel;			
+		}
+		public int getEnemyItemLevel() {
+			return this.itemLevel;
+		}
+		public void setEnemyItemLevel(int itemLevel) {
+			this.itemLevel = itemLevel;
+		}
+		public int getEnemyLevel() {
+			return this.enemyLevel;
+		}
+		public void setEnemyLevel(int enemyLevel) {
+			this.enemyLevel = enemyLevel;
 		}
 	}
 }
