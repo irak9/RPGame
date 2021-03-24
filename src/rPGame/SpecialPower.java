@@ -2,5 +2,5 @@ package rPGame;
 
 public interface SpecialPower {
 
-	public int offensiveSkill(int damage);
+	public int offensiveSkill(Creature creature, Weapon weapon);
 }

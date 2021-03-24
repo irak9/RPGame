@@ -46,7 +46,10 @@ public class randomNameGen {
 		case 8:{
 			weaponName = weaponName8;
 			break;
-		}		
+		}	
+		default : {
+			weaponName = "Pencil";
+		}
 		}
 		return weaponName;
 	}
@@ -86,8 +89,54 @@ public class randomNameGen {
 			armourName = armourName6;
 			break;
 		}	
+		default :{
+			armourName = "Cardboard";
+		}
 		}
 		return armourName;
+	
+}
+	
+	public static String shieldName() {
+		int rnd = (int) (Math.random() * 5) + 1;
+		String shieldName= "noName";
+		String shieldName1 = "Kite shield";
+		String shieldName2 = "Buckler";
+		String shieldName3 = "Targe";
+		String shieldName4 = "Round shield";
+		String shieldName5 = "Spiked shield";
+		String shieldName6 = "Tower shield";
+		
+		switch(rnd){
+		case 1:{
+			shieldName = shieldName1;
+			break;
+		}
+		case 2:{
+			shieldName = shieldName2;
+			break;
+		}
+		case 3:{
+			shieldName = shieldName3;
+			break;
+		}
+		case 4:{
+			shieldName = shieldName4;
+			break;
+		}
+		case 5:{
+			shieldName = shieldName5;
+			break;
+		}
+		case 6:{
+			shieldName = shieldName6;
+			break;
+		}	
+		default :{
+			shieldName = "Wall fragment";
+		}
+		}
+		return shieldName;
 	
 }
 }

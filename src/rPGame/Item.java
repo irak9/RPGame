@@ -1,6 +1,6 @@
 package rPGame;
 
-public class Item {
+public abstract class Item implements Cloneable {
 	String name;
 	int weight, quantity, value;
 	
@@ -29,6 +29,7 @@ public class Item {
 		this.name = name;
 	}
 	
+}
 	
 	class Weapon extends Item {
 		int minDamage, maxDamage, range;
@@ -67,10 +68,10 @@ public class Item {
 	class Armour extends Item{
 		int armour;
 		
-		public int getArmour() {
+		public int getArmourValue() {
 			return this.armour;
 		}
-		public void setArmour() {
+		public void setArmourValue(int armour) {
 			this.armour = armour;
 		}
 		
@@ -83,4 +84,44 @@ public class Item {
 		}
 	}
 	
+	class Shield extends Item {
+		int armour;
+		
+		public int getArmourValue() {
+			return this.armour;
+		}
+		public void setArmourValue(int armour) {
+			this.armour = armour;
+		}
+		
+		Shield(String name, int armour, int weight, int quantity, int value){
+			this.name = name;
+			this.armour = armour;
+			this.weight = weight;
+			this.quantity = quantity;
+			this.value = value;
+		
+	}
 }
+	
+	class HealingPotion extends Item {
+		int healValue;
+		
+		public int getHealValue() {
+			return this.healValue;
+		}
+		public void setHealValue(int healValue) {
+			this.healValue = healValue;
+		}
+		
+		HealingPotion(String name, int healValue, int weight, int quantity, int value){
+			this.name = name;
+			this.healValue = healValue;
+			this.weight = weight;
+			this.quantity = quantity;
+			this.value = value;
+		}
+		
+	}
+	
+	
