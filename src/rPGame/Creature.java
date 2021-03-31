@@ -1,7 +1,5 @@
 package rPGame;
 
-import rPGame.Item.*;
-
 public abstract class Creature implements SpecialPower{
 	String name;
 	protected int strength, dexterity, vitality, willpower, inteligence, actionPoints;
@@ -9,12 +7,20 @@ public abstract class Creature implements SpecialPower{
 	protected Weapon weapon;
 	protected Armour armour;
 	protected Shield shield;
+	protected HealingPotion healingPotion;
 
 	public int attack(Creature creature, Weapon weapon) {
-		return (int) ((Math.random() * weapon.getMaxDamage()) + weapon.getMinDamage() + 1) + creature.getStrength() / 4;
+		int damage = 0;
+		if(creature.getCurrentWeapon() != null) {
+		damage = (int) ((Math.random() * weapon.getMaxDamage()) + weapon.getMinDamage() + 1) + creature.getStrength() / 4;
+		}
+		else {
+			damage = creature.getStrength() / 4 + 1;
+		}
+		return  damage;
 	}
 	public int useHealingPotion(HealingPotion healingPotion, int vitAttribute, int willAttribute) {
-		return (int) Math.random() * (healingPotion.getHealValue() / 3 * willAttribute) + willAttribute + vitAttribute * healingPotion.getHealValue() / 3;
+		return (int) (Math.random() * (healingPotion.getHealValue() / 3 * willAttribute)) + willAttribute + vitAttribute * healingPotion.getHealValue() / 3;
 	}
 	
 public int getStrength() {
@@ -125,6 +131,12 @@ public Shield getCurrentShield() {
 public void setCurrentShield(Shield shield) {
 	this.shield = shield;
 }
+public HealingPotion getHealingPotion() {
+	return this.healingPotion;
+}
+public void setHealingPotion(HealingPotion healingPotion) {
+	this.healingPotion = healingPotion;
+}
 @Override
 public int offensiveSkill(Creature creature, Weapon weapon) {
 	// TODO Auto-generated method stub
@@ -156,6 +168,7 @@ BattlePriest(String name, int strength, int dexterity, int vitality, int willpow
 	this.weapon = null;
 	this.armour = null;
 	this.shield = null;
+	this.healingPotion = null;
 	this.gold = 0;
 }
 @Override
@@ -192,6 +205,7 @@ Warrior(String name, int strength, int dexterity, int vitality, int willpower, i
 	this.weapon = null;
 	this.armour = null;
 	this.shield = null;
+	this.healingPotion = null;
 	this.gold = 0;
 }
 @Override
@@ -218,17 +232,17 @@ Goblin(String name, int strength, int dexterity, int vitality, int willpower, in
 	this.willpower = willpower;
 	this.inteligence = inteligence;
 	this.actionPoints = actionPoints;
-	this.maxHitPoints = maxHitPoints;
+	this.maxHitPoints = vitality * 3 + strength;
 	this.currentHitPoints = maxHitPoints;
-	this.maxEnergy = maxEnergy;
+	this.maxEnergy = willpower;
 	this.currentEnergy = maxEnergy;
-	this.attackRate = attackRate;
-	this.defenseRate = defenseRate;
+	this.attackRate = dexterity;
+	this.defenseRate = dexterity;
 	this.moveSpeed = moveSpeed;
 	this.weapon = null;
 	this.armour = null;
 	this.shield = null;
-	this.gold = 0;
+	this.gold = (int) (Math.random() * 4) + 1;
 }
 }
 class GoblinRaider extends Creature {
@@ -241,16 +255,16 @@ GoblinRaider(String name, int strength, int dexterity, int vitality, int willpow
 	this.willpower = willpower;
 	this.inteligence = inteligence;
 	this.actionPoints = actionPoints;
-	this.maxHitPoints = maxHitPoints;
+	this.maxHitPoints = vitality * 8 + strength * 6;
 	this.currentHitPoints = maxHitPoints;
-	this.maxEnergy = maxEnergy;
+	this.maxEnergy = willpower;
 	this.currentEnergy = maxEnergy;
-	this.attackRate = attackRate;
-	this.defenseRate = defenseRate;
+	this.attackRate = strength * 4 + dexterity;
+	this.defenseRate = dexterity * 2;
 	this.moveSpeed = moveSpeed;
 	this.weapon = null;
 	this.armour = null;
 	this.shield = null;
-	this.gold = 0;
+	this.gold = (int) (Math.random() * 20) + 10;
 }
 }

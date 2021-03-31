@@ -7,14 +7,16 @@ public class GameMechanics {
 	
 	public int choiceMethod() {
 		int choice = 0;
-		Scanner nmb = new Scanner(System.in);
 		try {
+		Scanner nmb = new Scanner(System.in);
 		choice = nmb.nextInt();
 		}
 		catch(Exception numberError) {
 			System.out.println("Number not recognized");
-		}
+		}	
 		return choice;
+		
+		
 	}
 	public String chooseName() {
 		String choice = "noName";
@@ -263,7 +265,7 @@ public void battlePriestClassInfo() {
 	System.out.println("Battle Priest");
 	System.out.println("base hp:10, +8 per vitality point, +1 per strength point, +3 per willpower point");
 	System.out.println("base energy:20, +4 per willpower point");
-	System.out.println("+1 attack rate per strength,dexterity and willpower point");
+	System.out.println("+1 attack rate per strength, dexterity and willpower point");
 	System.out.println("+1 defense rate per dexterity and willpower point \n");
 }
 
@@ -271,14 +273,24 @@ public void battlePriestClassInfo() {
 		
 //Enemy creation
 	public Goblin createGoblin(String name, int strength, int dexterity, int vitality, int willpower, int actionPoints,
-			int inteligence, int moveSpeed) {	
+			int inteligence, int moveSpeed, int itemLevel) {	
 		Goblin goblin = new Goblin(name, strength, dexterity, vitality, willpower, inteligence, actionPoints, moveSpeed);	
+		Weapon weapon = createWeapon(itemLevel / 2);
+		Armour armour = createArmour(itemLevel / 2);
+		goblin.setCurrentWeapon(weapon);
+		goblin.setCurrentArmour(armour);
 		return goblin;
 	}
 	
 	public GoblinRaider createGoblinRaider(String name, int strength, int dexterity, int vitality, int willpower, int actionPoints,
-			int inteligence, int moveSpeed) {
+			int inteligence, int moveSpeed, int itemLevel) {
 			GoblinRaider goblinRaider = new GoblinRaider(name, strength, dexterity, vitality, willpower, inteligence, actionPoints, moveSpeed);
+			Weapon weapon = createWeapon(itemLevel);
+			Armour armour = createArmour(itemLevel / 2);
+			Shield shield = createShield(itemLevel / 2);
+			goblinRaider.setCurrentWeapon(weapon);
+			goblinRaider.setCurrentArmour(armour);
+			goblinRaider.setCurrentShield(shield);
 		return goblinRaider;
 	}
 	
@@ -317,7 +329,7 @@ public void battlePriestClassInfo() {
 	}
 	
 	public HealingPotion createHealingPotion(int itemLevel) {
-		String name = "healingPotion";
+		String name = "Healing potion";
 		int healValue= (int) (itemLevel / 4 + 8 );
 		int weight = 2;
 		int quantity = 1;
@@ -388,21 +400,9 @@ public void battlePriestClassInfo() {
 
 //Shops
 	
-	public void shop(Creature player, int itemLevel) {
+	public void shop(Creature player, Weapon weapon, Armour armor, Shield shield, HealingPotion healingPotion) {
 		boolean choiceInShop = true;
-		Weapon weapon;
-		Armour armor;
-		Shield shield;
-		HealingPotion healingPotion;
 		
-		weapon = createWeapon(itemLevel);
-		armor = createArmour(itemLevel);
-		shield = createShield(itemLevel);
-		healingPotion = createHealingPotion(itemLevel);
-		weapon.setQuantity((int) (Math.random() * 10) + 1);
-		armor.setQuantity((int) (Math.random() * 3) + 1);
-		shield.setQuantity((int) (Math.random() * 7) + 1);
-		healingPotion.setQuantity((int) (Math.random() * 5) + 2);
 		System.out.println("");
 		System.out.println("Welcome in my shop, how can i help you");
 		while(choiceInShop == true) {
@@ -442,11 +442,11 @@ public void battlePriestClassInfo() {
 				System.out.println("3-" + shield.getName() + " armour: "+ shield.getArmourValue() + " price: " + shield.getValue());
 			}
 			if(healingPotion.getQuantity() >= 1) {
-				System.out.println("3-" + healingPotion.getName() + " base healing power: " + healingPotion.getHealValue() + " price: " + healingPotion.getValue());
+				System.out.println("4-" + healingPotion.getName() + " base healing power: " + healingPotion.getHealValue() + " price: " + healingPotion.getValue());
 			}
 			System.out.print("9-Your eqiupment,");
 			System.out.println(" 0-back");
-			System.out.println("Your gold: " + player.gold);
+			System.out.println("Your gold: " + player.getGold());
 			switch(choiceMethod()) {
 			case 1:	{
 				if(player.getCurrentWeapon() == null) {
@@ -570,34 +570,154 @@ public void battlePriestClassInfo() {
 }
 	
 	
-// End of shops
+//End of shops
+	
+//Battle mechanics
+	
+	public int isActionSuccessful(Creature attacker, Creature defender) {
+		int successRate = 0;
+		successRate = (int) (Math.random() * 100) + attacker.getAttackRate() - defender.getDefenseRate();
+		return successRate;
+	}
+	
+	public void battle(Creature player, Creature enemy) {
+		boolean loop = true;
+		characterInfo(enemy);
+		System.out.println("You have been attacked by " + enemy.getName());
+		
+		while(loop) {
+			int damage = 0;
+			int heal = 0;
+			int gold = 0;
+			int armor = 0;
+				
+			System.out.println("Choose action");
+			System.out.println("1-attack, 2-Use special power, 3-Use healing potion");
+			
+			switch(choiceMethod()) {
+			case 1: {
+				damage = player.attack(enemy, player.getCurrentWeapon());
+				break;
+			}
+			case 2: {
+				damage = player.offensiveSkill(enemy, player.getCurrentWeapon());
+				break;
+			}
+			case 3: {
+				heal = player.useHealingPotion(player.getHealingPotion(), player.getVitality(), player.getWillpower());
+				player.setCurrentHitPoints(Math.min(player.getMaxHitPoints(), (player.getCurrentHitPoints() + heal)));
+				break;
+			}
+			}
+			
+			if(50 < isActionSuccessful(player, enemy)) {
+				System.out.println("You swing your weapon and hit " + enemy.getName());
+				if(enemy.getCurrentArmour() != null) {
+					armor = armor + enemy.getCurrentArmour().getArmourValue();
+				}
+				if(enemy.getCurrentShield() != null) {
+					armor = armor + enemy.getCurrentShield().getArmourValue();
+				}
+					damage = damage - armor;
+					enemy.setCurrentHitPoints(enemy.getCurrentHitPoints() - damage);
+					System.out.println("You have dealt " + damage + " to " + enemy.getName());
+					System.out.println(enemy.getName() + " has " + enemy.getCurrentHitPoints() + " hit points.\n");
+			}
+			else {
+				System.out.println("You missed " + enemy.getName());
+			}
+			
+			if(50 < isActionSuccessful(enemy, player)) {	
+				armor = 0;
+				System.out.println(enemy.getName() + " swings his weapon and hits you");
+				if(player.getCurrentArmour() != null) {
+					armor = armor + player.getCurrentArmour().getArmourValue();
+				}
+				if(player.getCurrentShield() != null) {
+					armor = armor + player.getCurrentShield().getArmourValue();
+				}
+				damage = enemy.attack(player, enemy.getCurrentWeapon());
+				damage = damage - armor;
+				player.setCurrentHitPoints(player.getCurrentHitPoints() - damage);
+				System.out.println(enemy.getName() + " dealt " + damage + " to you.");
+				System.out.println(player.getName() + " has " + player.getCurrentHitPoints() + "/" + player.getMaxHitPoints() + " hit points.\n");
+			}
+			else {
+				System.out.println(enemy.getName() + " misses you");
+			}
+			
+			if(enemy.getCurrentHitPoints() < 1) {
+				System.out.println("You won battle with " + enemy.getName());
+				loop = false;
+				gold = enemy.getGold();
+				player.setGold(player.getGold() + gold);
+				System.out.println("you found " + gold + " gold");
+			}
+			if(player.getCurrentHitPoints() < 1) {
+				System.out.println("You lost battle with " + enemy.getName());
+				loop = false;
+			}
+		}
+	}
+	
+// End of battle mechanics
 			
 	public void startGame() {
 		difficultyInstance diff = setDifficulty();
 		Creature player;
+		boolean loop = true;
 		
 		player = createCharacter(diff);
 		System.out.println("\nYou are standing in main square of a small town");
+		while(loop) {
+		
+		Weapon weapon;
+		Armour armor;
+		Shield shield;
+		HealingPotion healingPotion;
+		
+		weapon = createWeapon(diff.getItemLevel());
+		armor = createArmour(diff.getItemLevel());
+		shield = createShield(diff.getItemLevel());
+		healingPotion = createHealingPotion(diff.getItemLevel());
+		weapon.setQuantity((int) (Math.random() * 10) + 1);
+		armor.setQuantity((int) (Math.random() * 3) + 1);
+		shield.setQuantity((int) (Math.random() * 7) + 1);
+		healingPotion.setQuantity((int) (Math.random() * 5) + 2);
+		loop = true;
+		while(loop) {
 		System.out.println("What would you like to do");
-		System.out.println("1-Visit shop, 2-Patrol road");
+		System.out.println("1-Visit shop, 2-Patrol around the town");
 		switch(choiceMethod()) {
 		case 1: {
-			shop(player, diff.itemLevel);
+			
+			shop(player, weapon, armor, shield, healingPotion);
 			break;
 		}
 		case 2: {
+			System.out.println(diff.getEnemyLevel());
+			Creature enemy = createGoblin("goblin", 1 * diff.getEnemyLevel() + 2, 3 * diff.getEnemyLevel(), 3 * diff.getEnemyLevel(), 1 * diff.getEnemyLevel(),
+					1 * diff.getEnemyLevel(), 8, 4, diff.getItemLevel() + 1);	
+			battle(player, enemy);
 			break;
 		}
 		}
+		if(player.getCurrentHitPoints() < 1) {
+			System.out.println("Game over");
+			loop = false;
+	}
 		
+		}
+	}
 	}
 
 //Difficulty settings
 	
 	class difficultyInstance {
-		int itemLevel, gold, attributePoints, enemyLevel;
+		private int itemLevel, gold, attributePoints, enemyLevel;
 		difficultyInstance(int itemLevel, int gold, int attributePoints, int enemyLevel){
 			this.itemLevel = itemLevel;
+			this.enemyLevel = enemyLevel;
 			this.gold = gold;
 			this.attributePoints = attributePoints;
 		}
