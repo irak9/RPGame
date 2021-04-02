@@ -176,7 +176,7 @@ public int offensiveSkill(Creature player, Weapon weapon) {
 	int damage = 0;
 	System.out.println("Battle Priest SKill"); 
 	if(player.getCurrentWeapon() != null) {
-		damage = player.getWillpower() * 7 + weapon.getMaxDamage();
+		damage = player.getWillpower() * 7 + weapon.getMaxDamage() * 2;
 	}
 	else {
 		damage = player.getWillpower() * 7;
@@ -213,7 +213,7 @@ public int offensiveSkill(Creature player, Weapon weapon) {
 	int damage = 0;
 	System.out.println("Warrior Skill");
 	if(player.getCurrentWeapon() != null) {
-		damage = (int) (player.getStrength() * 2 + Math.random() * 8) + weapon.getMinDamage();
+		damage = (int) (player.getStrength() * 2 + Math.random() * 8) + weapon.getMinDamage() * 2;
 	}
 	else {
 		damage = (int) (player.getStrength() * 2 + Math.random() * 8);

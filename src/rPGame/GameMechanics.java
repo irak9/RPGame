@@ -294,6 +294,69 @@ public void battlePriestClassInfo() {
 		return goblinRaider;
 	}
 	
+	public Creature randomRoadEncounter(difficultyInstance difficulty) {
+		Creature enemy = null;
+		switch ((int) ((Math.random() * 11) + 1)) {
+		case 1: {
+			enemy = createGoblin("goblin", 1 * difficulty.getEnemyLevel() + 2, 3 * difficulty.getEnemyLevel(), 3 * difficulty.getEnemyLevel(), 1 * difficulty.getEnemyLevel(),
+					1 * difficulty.getEnemyLevel(), 8, 4, difficulty.getItemLevel() + 1);	
+			break;
+		}
+		case 2: {
+			enemy = createGoblin("goblin", 2 * difficulty.getEnemyLevel() + 2, 3 * difficulty.getEnemyLevel(), 3 * difficulty.getEnemyLevel(), 1 * difficulty.getEnemyLevel(),
+					1 * difficulty.getEnemyLevel(), 8, 4, difficulty.getItemLevel() + 1);	
+			break;
+		}
+		case 3: {
+			enemy = createGoblin("goblin", 1 * difficulty.getEnemyLevel() + 2, 3 * difficulty.getEnemyLevel(), 4 * difficulty.getEnemyLevel(), 1 * difficulty.getEnemyLevel(),
+					1 * difficulty.getEnemyLevel(), 8, 4, difficulty.getItemLevel() + 1);	
+			break;
+		}
+		case 4: {
+			enemy = createGoblinRaider("goblin raider", 5 * difficulty.getEnemyLevel() + 2, 4 * difficulty.getEnemyLevel(), 6 * difficulty.getEnemyLevel(), 1 * difficulty.getEnemyLevel(),
+					1 * difficulty.getEnemyLevel(), 8, 4, difficulty.getItemLevel() + 1);	
+			break;
+		}
+		case 5: {
+			int gold = (int) (Math.random() * 10) + difficulty.getItemLevel() * 5;
+			System.out.println("You found remains of a traveler. It's hard to tell how long ago he died. You found next to him pouch with " + gold + " gold.");
+			break;
+		}
+		case 6 : {
+			int gold = (int) (Math.random() * 100) + difficulty.getItemLevel() * 20;
+			System.out.println("You found remains of merchant's caravan, dead mercenary guards and propaly a dead merchant."
+					+ " You found next to merchant pouch with " + gold + " gold.");
+			break;
+		}
+		case 7 : {
+			System.out.println("Nothing interesting happened on todays patrol. You feel bored.");
+			break;
+		}
+		case 8 : {
+			System.out.println("Nothing interesting happened on todays patrol. It sure it's better this way.");
+			break;
+		}
+		case 9 : {
+			System.out.println("Nothing interesting happened on todays patrol. Patrols pays off.");
+			break;
+		}
+		case 10: {
+			System.out.println("You found remains of a traveler. It's hard to tell how long ago he died. You found nothing iteresting in his possesion");
+			break;
+		}
+		case 11: {
+			int gold = (int) (Math.random() * 20) + difficulty.getItemLevel() * 3;
+			System.out.println("You found remains of a traveler. It's hard to tell how long ago he died. You found next to him pouch with " + gold + " gold.");
+			break;
+		}
+		default: {
+			enemy = createGoblin("goblin", 1 * difficulty.getEnemyLevel() + 2, 4 * difficulty.getEnemyLevel(), 3 * difficulty.getEnemyLevel(), 1 * difficulty.getEnemyLevel(),
+					1 * difficulty.getEnemyLevel(), 8, 4, difficulty.getItemLevel() + 1);	
+			break;
+		}
+		}
+				return enemy;	
+	}
 //End of enemy creation	
 	
 //items creation
@@ -361,12 +424,19 @@ public void battlePriestClassInfo() {
 		System.out.print(", Weight: " + shield.getWeight());
 		System.out.println(", Value: " + shield.getValue());
 	}
+	public void healingPotionInfo(HealingPotion healingPotion) {
+		System.out.print("Name: " + healingPotion.getName());
+		System.out.print(", Healing power: " + healingPotion.getHealValue());
+		System.out.print(", Potion quantity: " + healingPotion.getQuantity());
+		System.out.print(", Weight: " + healingPotion.getWeight());
+		System.out.println(", Value: " + healingPotion.getValue());
+	}
 	
 	public void equipmentInfo(Creature player) {
 		boolean managingEq = true;
 		while (managingEq == true)
 		{
-			System.out.println("1-weapon, 2-armour, 3-shield, 0-exit");
+			System.out.println("1-weapon, 2-armour, 3-shield, 4-healing potion, 0-exit");
 			switch(choiceMethod()) {
 			case 1: {
 				if(player.getCurrentWeapon() != null)
@@ -389,6 +459,13 @@ public void battlePriestClassInfo() {
 					System.out.println("You have no armour.");
 				break;
 			}
+			case 4: {
+				if(player.getHealingPotion() != null)
+					healingPotionInfo(player.getHealingPotion());
+				else
+					System.out.println("You have no healing potions.");
+				break;
+			}
 			case 0: {
 				managingEq = false;
 			}
@@ -403,8 +480,7 @@ public void battlePriestClassInfo() {
 	public void shop(Creature player, Weapon weapon, Armour armor, Shield shield, HealingPotion healingPotion) {
 		boolean choiceInShop = true;
 		
-		System.out.println("");
-		System.out.println("Welcome in my shop, how can i help you");
+		System.out.println("\nWelcome in my shop, how can i help you?");
 		while(choiceInShop == true) {
 			System.out.println("1-buy, 2-sell, 9-Your eqiupment, 0-leave shop");
 			switch(choiceMethod()) {
@@ -433,7 +509,7 @@ public void battlePriestClassInfo() {
 		while(choiceInShop == true) {			
 			System.out.println(shopKeeperDialogue);
 			if(weapon.getQuantity() >= 1) {
-				System.out.println("1-" + weapon.getName() + " damage: " + weapon.getMinDamage() + "-" + weapon.getMaxDamage() + " price: " + weapon.getValue());
+				System.out.println("\n1-" + weapon.getName() + " damage: " + weapon.getMinDamage() + "-" + weapon.getMaxDamage() + " price: " + weapon.getValue());
 			}
 			if(armor.getQuantity() >= 1) {
 				System.out.println("2-" + armor.getName() + " armour: "+ armor.getArmourValue() + " price: " + armor.getValue());
@@ -446,19 +522,19 @@ public void battlePriestClassInfo() {
 			}
 			System.out.print("9-Your eqiupment,");
 			System.out.println(" 0-back");
-			System.out.println("Your gold: " + player.getGold());
+			System.out.println("Your gold: " + player.getGold() + ".");
 			switch(choiceMethod()) {
 			case 1:	{
 				if(player.getCurrentWeapon() == null) {
 					if(weapon.getQuantity() == 0)
-						System.out.println("Sorry, weapons sold");
+						System.out.println("Sorry, weapons sold.");
 					else if(weapon.getValue() >= player.getGold())
-						System.out.println("Sorry, you've got not enough gold");
+						System.out.println("Sorry, you've got not enough gold.");
 					if(weapon.getQuantity() >= 1 && player.getGold() >= weapon.getValue()) {
 						player.setCurrentWeapon(weapon); 
 						weapon.setQuantity(weapon.getQuantity() - 1);
 						player.setGold( player.getGold() - weapon.getValue());
-						System.out.println("You bought " + weapon.getName());
+						System.out.println("You bought " + weapon.getName() + ".");
 				}
 				}
 				else 
@@ -468,35 +544,60 @@ public void battlePriestClassInfo() {
 			case 2: {
 				if(player.getCurrentArmour() == null) {
 					if(armor.getQuantity() == 0)
-						System.out.println("Sorry, armours sold");
+						System.out.println("Sorry, armours sold.");
 					else if(armor.getValue() >= player.getGold())
-						System.out.println("Sorry, you've got not enough gold");
+						System.out.println("Sorry, you've got not enough gold.");
 					if(armor.getQuantity() >= 1 && player.getGold() >= armor.getValue()) {
 						player.setCurrentArmour(armor);
 						armor.setQuantity(armor.getQuantity() - 1);
 						player.setGold(player.getGold() - armor.getValue());
-						System.out.println("You bought " + armor.getName());
+						System.out.println("You bought " + armor.getName() + ".");
 				}
 				}
 				else
-					System.out.println("Sell your current armour");
+					System.out.println("Sell your current armour.");
 				break;
 				}
 			case 3: {		
 				if(player.getCurrentShield() == null) {
 					if(shield.getQuantity()== 0)
-						System.out.println("Sorry, shields sold");
+						System.out.println("Sorry, shields sold.");
 					else if(shield.getValue() >= player.getGold())
-						System.out.println("Sorry, you've got not enough gold");
+						System.out.println("Sorry, you've got not enough gold.");
 					if(shield.getQuantity() >= 1 && player.getGold() >= shield.getValue()) {
 						player.setCurrentShield(shield);
 						shield.setQuantity(shield.getQuantity() - 1);
 						player.setGold(player.getGold() - shield.getValue());
-						System.out.println("You bought " + shield.getName());
+						System.out.println("You bought " + shield.getName() + ".");
 				}
 				}
 				break;
 				}
+			case 4: {
+				if(player.getHealingPotion() == null) {
+					if(healingPotion.getValue() >= player.getGold())
+						System.out.println("Sorry, you've got not enough gold.");
+					else {
+					player.setHealingPotion(healingPotion);
+					player.getHealingPotion().setQuantity(1);
+					player.setGold(player.getGold() - healingPotion.getValue());
+					System.out.println("You bought " + healingPotion.getName() + ".");
+					}
+				}
+				else if (player.getHealingPotion() != null){
+					if(healingPotion.getValue() >= player.getGold())
+						System.out.println("Sorry, you've got not enough gold.");
+					if(healingPotion.getValue() <= player.getGold() && healingPotion.getQuantity() >= 1) {
+						player.getHealingPotion().setHealValue(healingPotion.getHealValue());
+						player.getHealingPotion().setQuantity(player.getHealingPotion().getQuantity() + 1);
+						player.setGold(player.getGold() - healingPotion.getValue());
+						//healingPotion.setQuantity(healingPotion.getQuantity() - 1);
+						System.out.println("You bought " + healingPotion.getName() + ".");
+					}
+				}
+				
+				break;
+			}
 			case 9:{
 				equipmentInfo(player);
 				break;
@@ -520,12 +621,12 @@ public void battlePriestClassInfo() {
 					Weapon weapon = player.getCurrentWeapon();
 					int value = (int) weapon.getValue()/2;
 					player.setGold(player.getGold() + value);
-					System.out.println("You sold your weapon for " + value + " gold");
+					System.out.println("You sold your weapon for " + value + " gold.");
 					player.setCurrentWeapon(null);
 					break;
 				}
 				else {
-					System.out.println("You have no weapon to sell");
+					System.out.println("You have no weapon to sell.");
 					break;
 				}
 			}
@@ -534,12 +635,12 @@ public void battlePriestClassInfo() {
 					Armour armour = player.getCurrentArmour();
 					int value = (int) armour.getValue()/2;
 					player.setGold(player.getGold() + value);
-					System.out.println("You sold your armour for " + value + " gold");
+					System.out.println("You sold your armour for " + value + " gold.");
 					player.setCurrentArmour(null);
 					break;				
 				}
 				else {
-					System.out.println("You have no armour to sell");
+					System.out.println("You have no armour to sell.");
 					break;
 				}
 			}
@@ -548,12 +649,12 @@ public void battlePriestClassInfo() {
 					Shield shield = player.getCurrentShield();
 					int value = (int) shield.getValue()/2;
 					player.setGold(player.getGold() + value);
-					System.out.println("You sold your shield for " + value + " gold");
+					System.out.println("You sold your shield for " + value + " gold.");
 					player.setCurrentShield(null);
 					break;				
 				}
 				else {
-					System.out.println("You have no shield to sell");
+					System.out.println("You have no shield to sell.");
 					break;
 				}
 			}
@@ -582,8 +683,7 @@ public void battlePriestClassInfo() {
 	
 	public void battle(Creature player, Creature enemy) {
 		boolean loop = true;
-		characterInfo(enemy);
-		System.out.println("You have been attacked by " + enemy.getName());
+		System.out.println("You have been attacked by " + enemy.getName() + ".");
 		
 		while(loop) {
 			int damage = 0;
@@ -596,65 +696,93 @@ public void battlePriestClassInfo() {
 			
 			switch(choiceMethod()) {
 			case 1: {
-				damage = player.attack(enemy, player.getCurrentWeapon());
+				if(50 < isActionSuccessful(player, enemy)) {
+					System.out.println("You swing your weapon and hit " + enemy.getName() + ".");
+					damage = player.attack(player, player.getCurrentWeapon());
+					if(enemy.getCurrentArmour() != null) {
+						armor = armor + enemy.getCurrentArmour().getArmourValue();
+					}
+					if(enemy.getCurrentShield() != null) {
+						armor = armor + enemy.getCurrentShield().getArmourValue();
+					}
+						damage = Math.max(0, damage - armor);
+						enemy.setCurrentHitPoints(enemy.getCurrentHitPoints() - damage);
+						System.out.println("You have dealt " + damage + " to " + enemy.getName() + ".");
+						System.out.println(enemy.getName() + " has " + enemy.getCurrentHitPoints() + " hit points.\n");
+				}
+				else {
+					System.out.println("You missed " + enemy.getName() + "\n");
+				}
 				break;
 			}
 			case 2: {
-				damage = player.offensiveSkill(enemy, player.getCurrentWeapon());
+				if(50 < isActionSuccessful(player, enemy)) {
+					System.out.println("You swing your weapon and hit " + enemy.getName() + ".");
+					damage = player.offensiveSkill(player, player.getCurrentWeapon());
+					if(enemy.getCurrentArmour() != null) {
+						armor = armor + enemy.getCurrentArmour().getArmourValue();
+					}
+					if(enemy.getCurrentShield() != null) {
+						armor = armor + enemy.getCurrentShield().getArmourValue();
+					}
+						damage = Math.max(0, damage - armor);
+						enemy.setCurrentHitPoints(enemy.getCurrentHitPoints() - damage);
+						System.out.println("You have dealt " + damage + " to " + enemy.getName() + ".");
+						System.out.println(enemy.getName() + " has " + enemy.getCurrentHitPoints() + " hit points.\n");
+				}
+				else {
+					System.out.println("You missed " + enemy.getName() + "\n");
+				}
 				break;
 			}
 			case 3: {
-				heal = player.useHealingPotion(player.getHealingPotion(), player.getVitality(), player.getWillpower());
-				player.setCurrentHitPoints(Math.min(player.getMaxHitPoints(), (player.getCurrentHitPoints() + heal)));
+				if (player.getHealingPotion() != null) {
+					if(player.getHealingPotion().getQuantity() > 0) {
+							heal = player.useHealingPotion(player.getHealingPotion(), player.getVitality(), player.getWillpower());
+							player.setCurrentHitPoints(Math.min(player.getMaxHitPoints(), (player.getCurrentHitPoints() + heal)));
+							player.getHealingPotion().setQuantity(player.getHealingPotion().getQuantity() - 1);
+							System.out.println("You used healing potion and healed yourself for: " + heal);
+					}
+					else {
+						System.out.println("You have none healing potions!");
+					}
+				}
+				else {
+					System.out.println("You have none healing potions!");
+				}
 				break;
 			}
-			}
-			
-			if(50 < isActionSuccessful(player, enemy)) {
-				System.out.println("You swing your weapon and hit " + enemy.getName());
-				if(enemy.getCurrentArmour() != null) {
-					armor = armor + enemy.getCurrentArmour().getArmourValue();
-				}
-				if(enemy.getCurrentShield() != null) {
-					armor = armor + enemy.getCurrentShield().getArmourValue();
-				}
-					damage = damage - armor;
-					enemy.setCurrentHitPoints(enemy.getCurrentHitPoints() - damage);
-					System.out.println("You have dealt " + damage + " to " + enemy.getName());
-					System.out.println(enemy.getName() + " has " + enemy.getCurrentHitPoints() + " hit points.\n");
-			}
-			else {
-				System.out.println("You missed " + enemy.getName());
 			}
 			
 			if(50 < isActionSuccessful(enemy, player)) {	
 				armor = 0;
-				System.out.println(enemy.getName() + " swings his weapon and hits you");
+				System.out.println(enemy.getName() + " swings his weapon and hits you.");
 				if(player.getCurrentArmour() != null) {
 					armor = armor + player.getCurrentArmour().getArmourValue();
 				}
 				if(player.getCurrentShield() != null) {
 					armor = armor + player.getCurrentShield().getArmourValue();
 				}
-				damage = enemy.attack(player, enemy.getCurrentWeapon());
-				damage = damage - armor;
+				damage = enemy.attack(enemy, enemy.getCurrentWeapon());
+				damage = Math.max(0, damage - armor);
 				player.setCurrentHitPoints(player.getCurrentHitPoints() - damage);
 				System.out.println(enemy.getName() + " dealt " + damage + " to you.");
 				System.out.println(player.getName() + " has " + player.getCurrentHitPoints() + "/" + player.getMaxHitPoints() + " hit points.\n");
 			}
 			else {
-				System.out.println(enemy.getName() + " misses you");
+				System.out.println(enemy.getName() + " misses you.\n");
 			}
 			
 			if(enemy.getCurrentHitPoints() < 1) {
-				System.out.println("You won battle with " + enemy.getName());
+				System.out.println("You won battle with " + enemy.getName() + ".");
 				loop = false;
 				gold = enemy.getGold();
 				player.setGold(player.getGold() + gold);
 				System.out.println("you found " + gold + " gold");
+				enemy = null;
 			}
 			if(player.getCurrentHitPoints() < 1) {
-				System.out.println("You lost battle with " + enemy.getName());
+				System.out.println("You lost battle with " + enemy.getName() + ".");
 				loop = false;
 			}
 		}
@@ -665,6 +793,7 @@ public void battlePriestClassInfo() {
 	public void startGame() {
 		difficultyInstance diff = setDifficulty();
 		Creature player;
+		Creature enemy;
 		boolean loop = true;
 		
 		player = createCharacter(diff);
@@ -684,10 +813,11 @@ public void battlePriestClassInfo() {
 		armor.setQuantity((int) (Math.random() * 3) + 1);
 		shield.setQuantity((int) (Math.random() * 7) + 1);
 		healingPotion.setQuantity((int) (Math.random() * 5) + 2);
+		
 		loop = true;
 		while(loop) {
-		System.out.println("What would you like to do");
-		System.out.println("1-Visit shop, 2-Patrol around the town");
+		System.out.println("What would you like to do?");
+		System.out.println("1-Visit shop, 2-Patrol around the town, 9-Equipment info, 0-Character info");
 		switch(choiceMethod()) {
 		case 1: {
 			
@@ -696,9 +826,18 @@ public void battlePriestClassInfo() {
 		}
 		case 2: {
 			System.out.println(diff.getEnemyLevel());
-			Creature enemy = createGoblin("goblin", 1 * diff.getEnemyLevel() + 2, 3 * diff.getEnemyLevel(), 3 * diff.getEnemyLevel(), 1 * diff.getEnemyLevel(),
-					1 * diff.getEnemyLevel(), 8, 4, diff.getItemLevel() + 1);	
+			enemy = randomRoadEncounter(diff);
+			if(enemy != null) {
 			battle(player, enemy);
+			}
+			break;
+		}
+		case 9: {
+			equipmentInfo(player);
+			break;
+		}
+		case 0: {
+			characterInfo(player);
 			break;
 		}
 		}
