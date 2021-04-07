@@ -269,6 +269,10 @@ public void battlePriestClassInfo() {
 	System.out.println("+1 defense rate per dexterity and willpower point \n");
 }
 
+public void hitPointsAndEnergyInfo(Creature creature) {
+	System.out.print("Hit points: " + creature.getCurrentHitPoints() + "/" + creature.getMaxHitPoints() + " ");
+	System.out.println("Energy: " + creature.getCurrentEnergy() + "/" + creature.getMaxEnergy());
+}
 //End of character info methods
 		
 //Enemy creation
@@ -341,7 +345,7 @@ public void battlePriestClassInfo() {
 			break;
 		}
 		case 10: {
-			System.out.println("You found remains of a traveler. It's hard to tell how long ago he died. You found nothing iteresting in his possesion");
+			System.out.println("You found remains of a traveler. It's hard to tell how long ago he died. You found nothing interesting in his possesion.");
 			break;
 		}
 		case 11: {
@@ -690,7 +694,9 @@ public void battlePriestClassInfo() {
 			int heal = 0;
 			int gold = 0;
 			int armor = 0;
-				
+			
+			System.out.print(player.getName() + " ");
+			hitPointsAndEnergyInfo(player);
 			System.out.println("Choose action");
 			System.out.println("1-attack, 2-Use special power, 3-Use healing potion");
 			
@@ -717,7 +723,6 @@ public void battlePriestClassInfo() {
 			}
 			case 2: {
 				if(50 < isActionSuccessful(player, enemy)) {
-					System.out.println("You swing your weapon and hit " + enemy.getName() + ".");
 					damage = player.offensiveSkill(player, player.getCurrentWeapon());
 					if(enemy.getCurrentArmour() != null) {
 						armor = armor + enemy.getCurrentArmour().getArmourValue();
@@ -830,6 +835,10 @@ public void battlePriestClassInfo() {
 			if(enemy != null) {
 			battle(player, enemy);
 			}
+			int energyRecovery = (int) (1 + (player.getWillpower() / 2));
+			player.setCurrentEnergy(Math.min(player.getMaxEnergy(), player.getCurrentEnergy() + energyRecovery));
+			System.out.println("you recovered " + energyRecovery + "energy");
+			hitPointsAndEnergyInfo(player);
 			break;
 		}
 		case 9: {

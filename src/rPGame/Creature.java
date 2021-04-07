@@ -174,12 +174,19 @@ BattlePriest(String name, int strength, int dexterity, int vitality, int willpow
 @Override
 public int offensiveSkill(Creature player, Weapon weapon) {
 	int damage = 0;
-	System.out.println("Battle Priest SKill"); 
-	if(player.getCurrentWeapon() != null) {
-		damage = player.getWillpower() * 7 + weapon.getMaxDamage() * 2;
+	if(player.getCurrentEnergy() >= 10) {
+		if(player.getCurrentWeapon() != null) {
+			damage = player.getWillpower() * 6 + weapon.getMaxDamage() * 2;
+			System.out.println("Battle Priest sacred strike"); 
+		}
+		else {
+			damage = player.getWillpower() * 7;
+			System.out.println("Battle Priest sacred strike"); 
+		}
+		player.setCurrentEnergy(player.getCurrentEnergy() - 10);
 	}
 	else {
-		damage = player.getWillpower() * 7;
+		System.out.println("Not enough energy");
 	}
 	return damage;
 }
@@ -211,12 +218,19 @@ Warrior(String name, int strength, int dexterity, int vitality, int willpower, i
 @Override
 public int offensiveSkill(Creature player, Weapon weapon) {
 	int damage = 0;
-	System.out.println("Warrior Skill");
-	if(player.getCurrentWeapon() != null) {
-		damage = (int) (player.getStrength() * 2 + Math.random() * 8) + weapon.getMinDamage() * 2;
+	if(player.getCurrentEnergy() >= 6) {
+		if(player.getCurrentWeapon() != null) {
+			damage = (int) (player.getStrength() * 2 + Math.random() * 8) + weapon.getMinDamage() * 3;
+			System.out.println("Warrior Slash");
+		}
+		else {
+			damage = (int) (player.getStrength() * 2 + Math.random() * 8);
+			System.out.println("Warrior Slash");
+		}
+		player.setCurrentEnergy(player.getCurrentEnergy() - 6);
 	}
 	else {
-		damage = (int) (player.getStrength() * 2 + Math.random() * 8);
+		System.out.println("Not enough energy");
 	}
 	return damage;
 }
